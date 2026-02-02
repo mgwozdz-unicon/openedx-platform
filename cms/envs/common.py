@@ -852,6 +852,10 @@ INSTALLED_APPS = [
     'openedx_tagging.core.tagging.apps.TaggingConfig',
     'openedx.core.djangoapps.content_tagging',
 
+    # Assessment Criteria
+    "openedx_learning.apps.assessment_criteria.apps.AssessmentCriteriaConfig",
+
+
     # Search
     'openedx.core.djangoapps.content.search',
 

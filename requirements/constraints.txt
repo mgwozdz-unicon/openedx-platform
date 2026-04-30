@@ -65,6 +65,7 @@ numpy<2.0.0
 # from openedx-maintainers. Minor and patch versions can roll out automatically.
 # Issue for unpinning: https://github.com/openedx/edx-platform/issues/35269
 openedx-core<2
+
 # Date: 2023-11-29
 # Open AI version 1.0.0 dropped support for openai.ChatCompletion which is currently in use in enterprise.
 # Issue for unpinning: https://github.com/openedx/edx-platform/issues/35268

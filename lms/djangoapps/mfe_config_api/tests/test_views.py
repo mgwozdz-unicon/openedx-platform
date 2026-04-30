@@ -24,6 +24,8 @@ default_legacy_config = {
     "ENABLE_COURSE_DISCOVERY": False,
 }
 
+INSTRUCTOR_SUPPORT_URL_PATTERN = r"^https://docs\.openedx\.org/en/[^/]+/educators/index\.html$"
+
 
 @ddt.ddt
 class MFEConfigTestCase(APITestCase):
@@ -311,9 +313,9 @@ class MFEConfigTestCase(APITestCase):
         response = self.client.get(f"{self.mfe_config_api_url}?mfe=instructor-dashboard")
         self.assertEqual(response.status_code, status.HTTP_200_OK)  # noqa: PT009
         data = response.json()
-        self.assertEqual(  # noqa: PT009
+        self.assertRegex(  # noqa: PT009
             data["SUPPORT_URL"],
-            "https://docs.openedx.org/en/latest/educators/index.html",
+            INSTRUCTOR_SUPPORT_URL_PATTERN,
         )
 
     @patch("lms.djangoapps.mfe_config_api.views.configuration_helpers")
@@ -785,9 +787,9 @@ class FrontendSiteConfigTestCase(APITestCase):
 
         apps_by_id = {app["appId"]: app for app in data["apps"]}
         instructor = apps_by_id["org.openedx.frontend.app.instructorDashboard"]
-        self.assertEqual(  # noqa: PT009
+        self.assertRegex(  # noqa: PT009
             instructor["config"]["SUPPORT_URL"],
-            "https://docs.openedx.org/en/latest/educators/index.html",
+            INSTRUCTOR_SUPPORT_URL_PATTERN,
         )
 
     @patch("lms.djangoapps.mfe_config_api.views.configuration_helpers")

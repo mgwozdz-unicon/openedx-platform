@@ -388,8 +388,13 @@ def searchable_doc_tags(object_id: OpaqueKey) -> dict:
         Fields.tags_level3: [],
     }
     if not all_tags:
-        # Clear out tags in the index when unselecting all tags for the block, otherwise
-        # it would remain the last value if a cleared Fields.tags field is not included
+        # Clear out tags in the index when the block has no tags (anymore)
+        # Note: due to a bug in Meilisearch, just setting `{Fields.tags: {}}`
+        # does not properly clear previously-set values within the tags field,
+        # like tags.level0, so we explicitly set `{Field.tags: { level0: [], ... }}`
+        # etc. to work around that and ensure tags are removed properly.
+        # In the future, if Meili's bug is fixed, we can perhaps simplify this
+        # and go back to just setting {Fields.tags: {}}` when there are no tags.
         return {Fields.tags: result}
 
     for obj_tag in all_tags:

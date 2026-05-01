@@ -9,11 +9,11 @@ from django.conf import settings
 from django.core.cache import cache
 from django.test import SimpleTestCase, override_settings
 from django.urls import reverse
-from openedx.core.release import doc_version
 from rest_framework import status
 from rest_framework.test import APITestCase
 
 from lms.djangoapps.mfe_config_api.views import mfe_name_to_app_id
+from openedx.core.release import doc_version
 
 # Default legacy configuration values, used in tests to build a correct expected response
 default_legacy_config = {

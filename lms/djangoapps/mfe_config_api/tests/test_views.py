@@ -9,6 +9,7 @@ from django.conf import settings
 from django.core.cache import cache
 from django.test import SimpleTestCase, override_settings
 from django.urls import reverse
+from openedx.core.release import doc_version
 from rest_framework import status
 from rest_framework.test import APITestCase
 
@@ -24,7 +25,7 @@ default_legacy_config = {
     "ENABLE_COURSE_DISCOVERY": False,
 }
 
-INSTRUCTOR_SUPPORT_URL_PATTERN = r"^https://docs\.openedx\.org/en/[^/]+/educators/index\.html$"
+INSTRUCTOR_SUPPORT_URL = f"https://docs.openedx.org/en/{doc_version()}/educators/index.html"
 
 
 @ddt.ddt
@@ -313,9 +314,9 @@ class MFEConfigTestCase(APITestCase):
         response = self.client.get(f"{self.mfe_config_api_url}?mfe=instructor-dashboard")
         self.assertEqual(response.status_code, status.HTTP_200_OK)  # noqa: PT009
         data = response.json()
-        self.assertRegex(  # noqa: PT009
+        self.assertEqual(  # noqa: PT009
             data["SUPPORT_URL"],
-            INSTRUCTOR_SUPPORT_URL_PATTERN,
+            INSTRUCTOR_SUPPORT_URL,
         )
 
     @patch("lms.djangoapps.mfe_config_api.views.configuration_helpers")
@@ -787,9 +788,9 @@ class FrontendSiteConfigTestCase(APITestCase):
 
         apps_by_id = {app["appId"]: app for app in data["apps"]}
         instructor = apps_by_id["org.openedx.frontend.app.instructorDashboard"]
-        self.assertRegex(  # noqa: PT009
+        self.assertEqual(  # noqa: PT009
             instructor["config"]["SUPPORT_URL"],
-            INSTRUCTOR_SUPPORT_URL_PATTERN,
+            INSTRUCTOR_SUPPORT_URL,
         )
 
     @patch("lms.djangoapps.mfe_config_api.views.configuration_helpers")
